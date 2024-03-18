@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Learning Website</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>Welcome to E-Learner </h1>
+<p>This module is used to practice basic math principles</p>
+<p>Select an operation: you would like to practice</p>
+<button class="button" onclick="startPractice('addition')">Addition</button>
+<button class="button" onclick="startPractice('multiplication')">Multiplication</button>
+<button class="button" onclick="startPractice('division')">Division</button>
+<button class="button" onclick="startPractice('subtraction')">Subtraction</button>
+
+<div id="practiceContainer" style="display: none;">
+    <h2 id="operationHeader"></h2>
+    <div id="problem"></div>
+    <input type="number" id="userAnswer" placeholder="Your Answer">
+    <button onclick="checkAnswer()">Check Answer</button>
+    <p id="result"></p>
+</div>
+
+<script>
+function startPractice(operation) {
+    document.getElementById("practiceContainer").style.display = "block";
+    document.getElementById("operationHeader").textContent = operation.charAt(0).toUpperCase() + operation.slice(1) + " Practice";
+    generateProblem(operation);
+}
+
+function generateProblem(operation) {
+    var num1, num2;
+    if (operation === 'addition' || operation === 'subtraction') {
+        num1 = Math.floor(Math.random() * 10);
+        num2 = Math.floor(Math.random() * 10);
+    } else if (operation === 'multiplication') {
+        num1 = Math.floor(Math.random() * 5) + 1;
+        num2 = Math.floor(Math.random() * 5) + 1;
+    } else if (operation === 'division') {
+        num2 = Math.floor(Math.random() * 5) + 1;
+        num1 = num2 * (Math.floor(Math.random() * 5) + 1);
+    }
+    
+    var problemElement = document.getElementById("problem");
+    
+    if (operation === 'addition') {
+        problemElement.textContent = num1 + " + " + num2;
+    } else if (operation === 'multiplication') {
+        problemElement.textContent = num1 + " × " + num2;
+    } else if (operation === 'division') {
+        problemElement.textContent = num1 + " ÷ " + num2;
+    } else if (operation === 'subtraction') {
+        problemElement.textContent = num1 + " - " + num2;
+    }
+}
+
+function checkAnswer() {
+    var problem = document.getElementById("problem").textContent;
+    var userAnswer = parseFloat(document.getElementById("userAnswer").value);
+    var nums = problem.split(/[\+\×\÷\-]/);
+    var correctAnswer;
+    
+    if (problem.includes("+")) {
+        correctAnswer = parseFloat(nums[0].trim()) + parseFloat(nums[1].trim());
+    } else if (problem.includes("×")) {
+        correctAnswer = parseFloat(nums[0].trim()) * parseFloat(nums[1].trim());
+    } else if (problem.includes("÷")) {
+        correctAnswer = parseFloat(nums[0].trim()) / parseFloat(nums[1].trim());
+    } else if (problem.includes("-")) {
+        correctAnswer = parseFloat(nums[0].trim()) - parseFloat(nums[1].trim());
+    }
+    
+    var resultElement = document.getElementById("result");
+    
+    if (userAnswer === correctAnswer) {
+        resultElement.textContent = "Correct!";
+    } else {
+        resultElement.textContent = "Incorrect. The correct answer is " + correctAnswer + ".";
+    }
+
+    var operation = document.getElementById("operationHeader").textContent.split(" ")[0].toLowerCase();
+    generateProblem(operation);
+    document.getElementById("userAnswer").value = ""; 
+}
+</script>
+</body>
+</html>
